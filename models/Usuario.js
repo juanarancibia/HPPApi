@@ -16,14 +16,20 @@ module.exports = function (sequelize, DataTypes) {
         field: "contrasena",
       },
       rol: {
-        type: DataTypes.INTEGER(11),
+        type: DataTypes.ENUM("Entrenador", "Atleta"),
         allowNull: false,
+        defaultValue: "Atleta",
         field: "rol",
       },
-      nombreCompleto: {
-        type: DataTypes.STRING(320),
+      nombre: {
+        type: DataTypes.STRING(100),
         allowNull: false,
-        field: "nombreCompleto",
+        field: "nombre",
+      },
+      apellido: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        field: "apellido",
       },
       idPlanificacion: {
         type: DataTypes.INTEGER(11),
