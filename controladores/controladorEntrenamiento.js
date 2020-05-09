@@ -16,11 +16,8 @@ function setEntrenamiento(req, res) {
     visible: visible,
   })
     .then((Ent) => {
-      console.log(Ent.dataValues);
       if (secciones) {
-        console.log(secciones);
         secciones.forEach((sec) => {
-          console.log(sec);
           Seccion.create({
             idPlani: idPlani,
             fecha: Ent.dataValues.fecha,
@@ -29,7 +26,6 @@ function setEntrenamiento(req, res) {
           })
             .then((nuevo) => {
               if (sec.wods) {
-                console.log(sec.wods);
                 sec.wods.forEach((wod) => {
                   Wod.create({
                     fecha: Ent.dataValues.fecha,
@@ -51,6 +47,66 @@ function setEntrenamiento(req, res) {
     .catch((err) => res.send(err));
 }
 
+function updateEntrenamiento(req, res) {
+  const { idPlani, comentarios, visible, secciones, fecha } = req.body;
+  Entrenamiento.update(
+    {
+      comentarios: comentarios,
+      visible: visible,
+    },
+    {
+      where: {
+        idPlani: idPlani,
+        fecha: fecha,
+      },
+    }
+  ).then((Ent) => {
+    if (secciones) {
+      secciones.forEach((sec) => {
+        console.log(sec);
+        Seccion.update(
+          {
+            tipoSeccion: sec.tipo,
+            comentarios: sec.comentarios,
+          },
+          {
+            where: {
+              idPlani: idPlani,
+              idSeccion: sec.id,
+              fecha: fecha,
+            },
+          }
+        )
+          .then((nuevo) => {
+            if (sec.wods) {
+              sec.wods.forEach((wod) => {
+                Wod.update(
+                  {
+                    descripcion: wod.descripcion,
+                    comentarios: wod.comentarios,
+                    tipoScore: wod.tipoScore,
+                    idTimer: wod.idTimer,
+                  },
+                  {
+                    where: {
+                      fecha: fecha,
+                      idSeccion: sec.id,
+                      idPlani: idPlani,
+                      idWod: wod.idWod,
+                    },
+                  }
+                );
+              });
+            }
+          })
+          .catch((err) => res.send(err));
+      });
+    }
+    res.send(Ent);
+  });
+}
+
 module.exports = {
   setEntrenamiento: setEntrenamiento,
+  updateEntrenamiento: updateEntrenamiento,
 };

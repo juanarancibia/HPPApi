@@ -28,6 +28,12 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         field: "fecha",
       },
+      idPlani: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        primaryKey: true,
+        field: "idPlani",
+      },
       score: {
         type: DataTypes.STRING(50),
         allowNull: false,

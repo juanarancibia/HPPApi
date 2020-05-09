@@ -16,6 +16,17 @@ function validarEntrenador(req, res, next) {
   }
 }
 
+function chequearAtleta(req, res, next) {
+  const token = req.headers.authorization.split(" ")[1];
+  const payload = jwt.verify(token, "ContraseñaJWT");
+  if (payload.rol == "Atleta") {
+    req.body.email = payload.usuario;
+    return next();
+  }
+  return next();
+}
+
 module.exports = {
   validarEntrenador: validarEntrenador,
+  chequearAtleta: chequearAtleta,
 };
