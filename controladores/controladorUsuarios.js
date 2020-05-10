@@ -60,15 +60,15 @@ function logIn(req, res) {
         return;
       }
       if (bcrypt.compareSync(contrasena, resultado[0].dataValues.contrasena)) {
-        res.send(
-          jwt.sign(
+        res.json({
+          token: jwt.sign(
             {
               usuario: usuario,
               rol: resultado[0].dataValues.rol,
             },
             "ContraseñaJWT"
-          )
-        );
+          ),
+        });
       } else {
         res.send("Usuario o contraseña incorrectos");
       }
