@@ -99,7 +99,7 @@ function entrenamientoDia(req, res) {
 
 function getPlanis(req, res) {
   Planificacion.findAll().then(resultado => {
-    res.json({ resultado });
+    res.json(resultado);
   }).catch(err => {
     res.json({ error: err });
   });

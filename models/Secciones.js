@@ -43,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       comentarios: {
         type: DataTypes.STRING(1024),
-        allowNull: false,
+        allowNull: true,
         field: "comentarios",
       },
     },
