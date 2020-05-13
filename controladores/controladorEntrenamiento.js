@@ -7,10 +7,12 @@ const Seccion = sequelize.import("../models/Secciones");
 const Wod = sequelize.import("../models/Wod");
 
 function setEntrenamiento(req, res) {
-  const { idPlani, comentarios, visible, secciones } = req.body;
+  const { idPlani, comentarios, visible, fecha, secciones } = req.body;
+  console.log(req.body);
+  console.log(idPlani);
   var d = new Date();
   Entrenamiento.create({
-    fecha: d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate(),
+    fecha: fecha ? fecha : d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
     idPlani: idPlani,
     comentarios: comentarios,
     visible: visible,
@@ -39,12 +41,12 @@ function setEntrenamiento(req, res) {
                 });
               }
             })
-            .catch((err) => res.send(err));
+            .catch((err) => res.json(err));
         });
       }
-      res.send(Ent);
+      return res.json(Ent);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => res.json(err));
 }
 
 function updateEntrenamiento(req, res) {
