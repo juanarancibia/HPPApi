@@ -19,6 +19,7 @@ function setEntrenamiento(req, res) {
   })
     .then((Ent) => {
       if (secciones) {
+        console.log(secciones);
         secciones.forEach((sec) => {
           Seccion.create({
             idPlani: idPlani,
@@ -28,7 +29,9 @@ function setEntrenamiento(req, res) {
           })
             .then((nuevo) => {
               if (sec.wods) {
+                console.log(sec.wods);
                 sec.wods.forEach((wod) => {
+
                   Wod.create({
                     fecha: Ent.dataValues.fecha,
                     idSeccion: nuevo.dataValues.idSeccion,
@@ -36,15 +39,16 @@ function setEntrenamiento(req, res) {
                     descripcion: wod.descripcion,
                     comentarios: wod.comentarios,
                     tipoScore: wod.tipoScore,
-                    idTimer: wod.idTimer,
+                    idTimer: wod.idTimer == "" ? null : pass,
                   });
                 });
               }
-            })
+            }).then(resp => res.json(resp))
             .catch((err) => res.json(err));
         });
+
       }
-      return res.json(Ent);
+
     })
     .catch((err) => res.json(err));
 }

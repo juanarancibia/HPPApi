@@ -21,7 +21,7 @@ module.exports = (app) => {
     validators.validarEntrenador,
     controladorPlani.setPlanificacion
   );
-  app.get(
+  app.post(
     "/planificacion/entrenamiento-dia",
     controladorPlani.entrenamientoDia
   );

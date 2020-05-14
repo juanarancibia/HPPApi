@@ -54,9 +54,9 @@ function logIn(req, res) {
     ],
   })
     .then((resultado) => {
-      console.log(resultado[0].dataValues);
+      console.log(resultado);
       if (resultado.length < 1) {
-        res.send("Usuario o contraseña incorrectos");
+        res.json("Usuario o contraseña incorrectos");
         return;
       }
       if (bcrypt.compareSync(contrasena, resultado[0].dataValues.contrasena)) {
@@ -65,17 +65,18 @@ function logIn(req, res) {
             {
               usuario: usuario,
               rol: resultado[0].dataValues.rol,
+              idPlani: resultado[0].dataValues.idPlanificacion,
             },
             "ContraseñaJWT"
           ),
         });
       } else {
-        res.send("Usuario o contraseña incorrectos");
+        res.json("Usuario o contraseña incorrectos");
       }
     })
     .catch((err) => {
       console.log(err);
-      res.send(err);
+      res.json(err);
     });
 }
 

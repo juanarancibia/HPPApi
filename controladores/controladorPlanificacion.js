@@ -49,19 +49,22 @@ function entrenamientoDia(req, res) {
     },
     include: [
       {
-        attributes: ["fecha", "comentarios"],
+        attributes: ["idPlani", "visible", "fecha", "comentarios"],
         model: Entrenamiento,
         where: {
-          fecha: d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate(),
+          fecha: d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
         },
         include: [
           {
             model: Seccion,
-            attributes: ["tipoSeccion", "comentarios"],
+            attributes: ["idSeccion", "tipoSeccion", "comentarios"],
             where: {
               fecha:
-                d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate(),
+                d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
             },
+            separate: true,
+            order: [['idSeccion', 'ASC'],],
+
             include: [
               {
                 model: Wod,
@@ -82,18 +85,19 @@ function entrenamientoDia(req, res) {
                 },
               },
             ],
+
           },
         ],
       },
     ],
   })
     .then((resultado) => {
-      console.log(resultado);
-      res.send(resultado);
+      console.log(resultado.dataValues.entrenXPlanis[0].dataValues.secciones);
+      res.json(resultado);
     })
     .catch((err) => {
       console.log(err);
-      res.send(err);
+      res.json(err);
     });
 }
 
