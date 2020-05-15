@@ -21,8 +21,8 @@ function setPlanificacion(req, res) {
     });
 }
 
-function entrenamientoDia(req, res) {
-  const { idPlani } = req.body;
+function getEntrenamiento(req, res) {
+  const { idPlani, fecha, visible } = req.body;
   var d = new Date();
 
   Planificacion.hasMany(Entrenamiento, {
@@ -45,14 +45,15 @@ function entrenamientoDia(req, res) {
 
   Planificacion.findOne({
     where: {
-      idPlanificacion: idPlani,
+      idPlanificacion: idPlani ? idPlani : 1,
     },
     include: [
       {
         attributes: ["idPlani", "visible", "fecha", "comentarios"],
         model: Entrenamiento,
         where: {
-          fecha: d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
+          fecha: fecha ? fecha : d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
+          visible: visible,
         },
         include: [
           {
@@ -60,7 +61,7 @@ function entrenamientoDia(req, res) {
             attributes: ["idSeccion", "tipoSeccion", "comentarios"],
             where: {
               fecha:
-                d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
+                fecha ? fecha : d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
             },
             separate: true,
             order: [['idSeccion', 'ASC'],],
@@ -75,13 +76,8 @@ function entrenamientoDia(req, res) {
                   "idTimer",
                 ],
                 where: {
-                  fecha:
-                    d.getFullYear() +
-                    "/" +
-                    (d.getMonth() + 1) +
-                    "/" +
-                    d.getDate(),
-                  idPlani: idPlani,
+                  fecha: fecha ? fecha : d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
+                  idPlani: idPlani ? idPlani : 1,
                 },
               },
             ],
@@ -92,7 +88,7 @@ function entrenamientoDia(req, res) {
     ],
   })
     .then((resultado) => {
-      console.log(resultado.dataValues.entrenXPlanis[0].dataValues.secciones);
+      console.log(resultado);
       res.json(resultado);
     })
     .catch((err) => {
@@ -111,6 +107,6 @@ function getPlanis(req, res) {
 
 module.exports = {
   setPlanificacion: setPlanificacion,
-  entrenamientoDia: entrenamientoDia,
+  getEntrenamiento: getEntrenamiento,
   getPlanis: getPlanis,
 };

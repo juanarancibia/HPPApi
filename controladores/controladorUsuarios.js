@@ -69,6 +69,7 @@ function logIn(req, res) {
             },
             "ContraseñaJWT"
           ),
+          rol: resultado[0].dataValues.rol,
         });
       } else {
         res.json("Usuario o contraseña incorrectos");

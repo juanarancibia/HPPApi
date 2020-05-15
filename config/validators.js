@@ -26,7 +26,31 @@ function chequearAtleta(req, res, next) {
   return next();
 }
 
+function chequearPlanificacion(req, res, next) {
+  const token = req.headers.authorization.split(" ")[1];
+  const payload = jwt.verify(token, "ContraseñaJWT");
+  if (payload.rol == "Atleta") {
+    req.body.idPlani = payload.idPlani;
+    return next();
+  }
+  return next();
+}
+
+function chequearVisibilidad(req, res, next) {
+  const token = req.headers.authorization.split(" ")[1];
+  const payload = jwt.verify(token, "ContraseñaJWT");
+  if (payload.rol == "Atleta") {
+    req.body.visible = "1";
+    return next();
+  }
+  req.body.visible = ["0", "1"];
+  return next();
+}
+
+
 module.exports = {
   validarEntrenador: validarEntrenador,
   chequearAtleta: chequearAtleta,
+  chequearPlanificacion: chequearPlanificacion,
+  chequearVisibilidad: chequearVisibilidad,
 };
